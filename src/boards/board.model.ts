@@ -3,9 +3,9 @@ export enum BoardStatus {
   PRIVATE = 'PRIVATE',
 }
 
-export interface Board {
-  id: string;
-  title: string;
-  description: string;
-  status: BoardStatus;
-}
+// export interface Board {
+//   id: string;
+//   title: string;
+//   description: string;
+//   status: BoardStatus;
+// }
