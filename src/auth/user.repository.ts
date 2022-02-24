@@ -2,12 +2,17 @@ import { ConflictException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { AuthCredentialDto } from './dto/auth-credential.dto';
 import { User } from './user.entity';
+import { genSalt, hash } from 'bcryptjs';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async createUser(autcredentialDto: AuthCredentialDto): Promise<void> {
     const { username, password } = autcredentialDto;
-    const user = this.create({ username, password });
+
+    const salt = await genSalt();
+    const hashedPassword = await hash(password, salt);
+
+    const user = this.create({ username, password: hashedPassword });
 
     try {
       await this.save(user);
