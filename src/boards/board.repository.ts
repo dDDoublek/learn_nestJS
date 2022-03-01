@@ -1,3 +1,4 @@
+import { User } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { BoardStatus } from './board.model';
@@ -8,13 +9,17 @@ export class BoardRepository extends Repository<Board> {
   // repository pattern을 사용할 것이라서
   // db 관련 코드는 repository file에 남긴다.
 
-  async createBoard(createBoardDto: CreateBoardDTO): Promise<Board> {
+  async createBoard(
+    createBoardDto: CreateBoardDTO,
+    user: User,
+  ): Promise<Board> {
     const { title, description } = createBoardDto;
 
     const board = this.create({
       title,
       description,
       status: BoardStatus.PUBLIC,
+      user,
     });
 
     await this.save(board);
