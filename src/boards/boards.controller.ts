@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -23,6 +24,7 @@ import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe'
 @Controller('boards')
 @UseGuards(AuthGuard())
 export class BoardsController {
+  private logger = new Logger('BoardController');
   constructor(private boardsService: BoardsService) {}
 
   @Get('/all')
@@ -35,6 +37,9 @@ export class BoardsController {
     @GetUser()
     user: User,
   ): Promise<Board[]> {
+    this.logger.verbose(
+      `로그 : ${user.username}님이 작성한 보드를 조회합니다.`,
+    );
     return this.boardsService.getUserBoards(user);
   }
 
@@ -43,6 +48,9 @@ export class BoardsController {
     @GetUser()
     user: User,
   ): Promise<Board[]> {
+    this.logger.verbose(
+      `로그 : ${user.username}님이 작성한 보드를 조회합니다.`,
+    );
     return this.boardsService.getBoardByUserId(user);
   }
 
@@ -57,6 +65,11 @@ export class BoardsController {
     @Body() createBoardDto: CreateBoardDTO,
     @GetUser() user: User,
   ): Promise<Board> {
+    this.logger.verbose(
+      `로그 : ${user.username}님이 ${JSON.stringify(
+        createBoardDto.title,
+      )} 의 제목으로 보드를 작성합니다.`,
+    );
     return this.boardsService.createBoard(createBoardDto, user);
   }
 
